@@ -1,0 +1,41 @@
+#minio配置
+minio:
+  endpoint: http://192.168.1.112:9001
+  accessKey: horqian
+  secretKey: Horqian123.
+  bucketName:
+
+#swagger
+swagger:
+  enable: true
+
+#数据库连接
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: Horqian123.
+    #password: Horqian123.
+    username: root
+    url: jdbc:mysql://192.168.1.112:3306/basic?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+  servlet:
+    multipart:
+      max-request-size: 20MB
+      max-file-size: 20MB
+
+#mybatis-plus
+mybatis-plus:
+  mapper-locations: classpath:/com/horqian/basic/mapper/xml/*.xml
+  type-aliases-package: com.horqian.basic.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      table-underline: true
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+      id-type: assign_id
+
+server:
+  port: 8999
