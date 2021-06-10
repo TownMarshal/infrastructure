@@ -2,6 +2,9 @@ package com.horqian.basic.service;
 
 import com.horqian.basic.entity.SysUserRoleTbl;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.horqian.basic.entity.SysUserTbl;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-06-08
  */
 public interface SysUserRoleTblService extends IService<SysUserRoleTbl> {
+
+    List<SysUserTbl> selectUserByRoleId(Long roleId);
 
 }

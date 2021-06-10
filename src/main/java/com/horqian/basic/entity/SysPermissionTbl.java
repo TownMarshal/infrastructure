@@ -38,6 +38,9 @@ public class SysPermissionTbl implements Serializable {
     @ApiModelProperty(value = "权限名")
     private String name;
 
+    @ApiModelProperty(value = "排序")
+    private Integer orderNum;
+
     @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "父级id")
     private Long parentId;

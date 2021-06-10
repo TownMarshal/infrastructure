@@ -10,10 +10,7 @@ import com.horqian.basic.service.SysRolePermissionTblService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,4 +34,17 @@ public class SysRolePermissionTblController {
         }
         return CommonResponse.makeRsp(CommonCode.FAIL);
     }
+
+    @ApiOperation("查询角色权限")
+    @GetMapping("/selectRolePermission")
+    public CommonResult selectRolePermission(@RequestParam Long roleId) {
+        QueryWrapper<SysRolePermissionTbl> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id",roleId);
+        List<SysRolePermissionTbl> list = sysRolePermissionTblService.list(queryWrapper);
+        if (list != null && list.size() > 0) {
+            return CommonResponse.makeRsp(CommonCode.SUCCESS,list);
+        }
+        return CommonResponse.makeRsp(CommonCode.FAIL);
+    }
+
 }

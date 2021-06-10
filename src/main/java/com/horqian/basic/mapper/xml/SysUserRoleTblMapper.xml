@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.horqian.basic.mapper.SysUserRoleTblMapper">
 
+    <select id="selectUserByRoleId" resultType="com.horqian.basic.entity.SysUserTbl">
+        select sut.* from sys_user_role_tbl  surt
+        left join sys_user_tbl sut on surt.user_id = sut.id
+        where surt.role_id = #{roleId}
+        and sut.delete_flag = 1
+    </select>
+
 </mapper>

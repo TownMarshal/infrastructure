@@ -2,6 +2,8 @@ package com.horqian.basic.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import java.io.Serializable;
@@ -43,11 +45,14 @@ public class AttachmentTbl implements Serializable {
     @ApiModelProperty(value = "附件地址")
     private String attachmentPath;
 
+    @TableField(select = false)
     private Date createTime;
 
+    @TableField(select = false)
     private Date updateTime;
 
     @TableLogic
+    @TableField(select = false)
     private Integer deleteFlag;
 
 

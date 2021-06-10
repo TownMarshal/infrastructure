@@ -3,15 +3,20 @@ package com.horqian.basic.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.horqian.basic.annotation.PassToken;
 import com.horqian.basic.common.CommonCode;
 import com.horqian.basic.common.CommonPageParam;
 import com.horqian.basic.common.CommonResponse;
 import com.horqian.basic.common.CommonResult;
 import com.horqian.basic.entity.SysUserTbl;
 import com.horqian.basic.service.SysUserTblService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
  * @author macro
  * @since 2021-06-09
  */
+@Api(tags = "用户管理")
 @RestController
 @RequestMapping("/sysUser")
 public class SysUserTblController {
@@ -32,7 +38,7 @@ public class SysUserTblController {
     @PostMapping("select")
     public CommonResult select(@RequestBody CommonPageParam<SysUserTbl> commonPageParam) {
         QueryWrapper<SysUserTbl> queryWrapper = new QueryWrapper<>(commonPageParam.getData());
-        queryWrapper.orderByDesc("update_time");
+        queryWrapper.orderByDesc("create_time");
         IPage<SysUserTbl> page = sysUserTblService.page(commonPageParam.getPage(), queryWrapper);
         return CommonResponse.makePageRsp(CommonCode.SUCCESS, page);
     }
@@ -40,7 +46,14 @@ public class SysUserTblController {
     @ApiOperation("新建用户")
     @PostMapping("/add")
     public CommonResult add(@RequestBody SysUserTbl sysUserTbl) {
-
+        QueryWrapper<SysUserTbl> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_name",sysUserTbl.getUserName());
+        List<SysUserTbl> list = sysUserTblService.list(queryWrapper);
+        if(list != null && list.size() > 0){
+            return CommonResponse.makeRsp(CommonCode.FAIL,"用户名已存在！");
+        }
+        BCryptPasswordEncoder bcp = new BCryptPasswordEncoder();
+        sysUserTbl.setPassword(bcp.encode(sysUserTbl.getPassword()));
         boolean save = sysUserTblService.save(sysUserTbl);
         if (save) {
             return CommonResponse.makeRsp(CommonCode.SUCCESS);
@@ -49,8 +62,12 @@ public class SysUserTblController {
     }
 
     @ApiOperation("修改用户")
-    @PutMapping("/update")
+    @PostMapping("/update")
     public CommonResult update(@RequestBody SysUserTbl sysUserTbl) {
+        BCryptPasswordEncoder bcp = new BCryptPasswordEncoder();
+        if(sysUserTbl.getPassword() != null){
+            sysUserTbl.setPassword(bcp.encode(sysUserTbl.getPassword()));
+        }
         boolean update = sysUserTblService.updateById(sysUserTbl);
         if (update) {
             return CommonResponse.makeRsp(CommonCode.SUCCESS);
@@ -60,7 +77,7 @@ public class SysUserTblController {
 
     @ApiOperation("删除用户")
     @DeleteMapping("/delete")
-    public CommonResult delete(Long id) {
+    public CommonResult delete(@RequestParam  Long id) {
         boolean delete = sysUserTblService.removeById(id);
         if (delete) {
             return CommonResponse.makeRsp(CommonCode.SUCCESS);

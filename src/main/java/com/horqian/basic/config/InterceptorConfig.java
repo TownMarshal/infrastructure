@@ -20,9 +20,9 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor())
-                .addPathPatterns("/**").
+                .addPathPatterns("/**")
                 //然后添加释放路径
-                excludePathPatterns("/login")
+                .excludePathPatterns("/login")
                 .excludePathPatterns("/swagger-resources/**","configuration/ui","/swagger-ui.html/**","/v2/api-docs")
                 .excludePathPatterns("/webjars/**");
     }

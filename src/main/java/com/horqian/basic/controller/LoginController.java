@@ -1,5 +1,6 @@
 package com.horqian.basic.controller;
 
+import com.horqian.basic.annotation.PassToken;
 import com.horqian.basic.common.CommonCode;
 import com.horqian.basic.common.CommonResponse;
 import com.horqian.basic.common.CommonResult;
@@ -25,6 +26,7 @@ public class LoginController {
     /**
      * 生成验证码
      */
+    @PassToken
     @ApiOperation("生成图片验证码")
     @GetMapping(value = "/getVerify")
     public void getVerify(HttpServletRequest request, HttpServletResponse response) {
@@ -46,6 +48,7 @@ public class LoginController {
     /**
      * 校验验证码
      */
+    @PassToken
     @ApiOperation("校验图片验证码")
     @RequestMapping(value = "/checkVerify", method = RequestMethod.POST, headers = "Accept=application/json")
     public boolean checkVerify(@RequestParam String verifyInput, HttpSession session) {
@@ -69,6 +72,7 @@ public class LoginController {
     /**
      * 生成验证码
      */
+    @PassToken
     @ApiOperation("生成短信验证码")
     @GetMapping(value = "/getPhoneCode")
     public CommonResult getPhoneCode(@RequestParam String phone, HttpServletRequest request) {
@@ -84,6 +88,7 @@ public class LoginController {
     /**
      * 校验验证码
      */
+    @PassToken
     @ApiOperation("校验短信验证码")
     @RequestMapping(value = "/verifyPhoneCode", method = RequestMethod.POST, headers = "Accept=application/json")
     public boolean verifyPhoneCode(@RequestParam String phoneCode, HttpSession session) {

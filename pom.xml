@@ -94,6 +94,12 @@
             <version>2.4.0</version>
         </dependency>
 
+        <!-- obs -->
+        <dependency>
+            <groupId>com.huaweicloud</groupId>
+            <artifactId>esdk-obs-java</artifactId>
+            <version>3.21.4</version>
+        </dependency>
         <!-- minio -->
         <dependency>
             <groupId>io.minio</groupId>

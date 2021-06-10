@@ -35,7 +35,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="SysUserTbl对象", description="")
-public class SysUserTbl implements Serializable, UserDetails {
+public class SysUserTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,69 +53,22 @@ public class SysUserTbl implements Serializable, UserDetails {
 
     private String phone;
 
-    private String userName;
-
     private String loginName;
 
+    @TableField(select = false)
     private String password;
 
+    private String userName;
+
+    @TableField(select = false)
     private Date createTime;
 
+    @TableField(select = false)
     private Date updateTime;
 
     @TableLogic
+    @TableField(select = false)
     private Integer deleteFlag;
 
-    @TableField(exist = false)
-    private String token;
 
-    @TableField(exist = false)
-    @ApiModelProperty(value = "角色列表")
-    private List<SysUserRoleView> roleList;
-
-    @TableField(exist = false)
-    @ApiModelProperty(value = "权限列表")
-    private List<SysRolePermissionView> permissionList;
-
-
-    //获取用户角色
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if(roleList != null){
-            for (SysUserRoleView role : roleList) {
-                authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
-            }
-        }
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    //是否过期 重写方法数据库加上相关字段即可
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    //是否已被锁定 重写方法数据库加上相关字段即可
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    //凭证是否过期 重写方法数据库加上相关字段即可
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    //是否禁用 重写方法数据库加上相关字段即可
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

@@ -5,6 +5,7 @@
     <select id="selectByParentId" resultType="com.horqian.basic.entity.SysPermissionTbl">
       select * from sys_permission_tbl
       where parent_id = #{parentId}
+      order by order_num
     </select>
 
     <delete id="deleteByParentId" parameterType="long">

@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface SysUserTblService extends IService<SysUserTbl> {
 
+    SysUserTbl selectByUserName(String userName);
+
 }

@@ -1,6 +1,7 @@
 package com.horqian.basic.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import java.io.Serializable;
@@ -43,6 +44,7 @@ public class SysRoleTbl implements Serializable {
     private String creatorId;
 
     @TableLogic
+    @TableField(select = false)
     private Integer deleteFlag;
 
 

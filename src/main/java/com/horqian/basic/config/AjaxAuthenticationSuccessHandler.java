@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 
 
 import com.horqian.basic.common.AjaxResponseBody;
-import com.horqian.basic.service.impl.SysUserTblServiceImpl;
+import com.horqian.basic.service.impl.SysUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -19,7 +19,7 @@ import java.io.IOException;
 public class AjaxAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
-    private SysUserTblServiceImpl sysUserService;
+    private SysUserDetailsServiceImpl sysUserService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {

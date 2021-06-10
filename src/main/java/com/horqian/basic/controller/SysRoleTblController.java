@@ -7,7 +7,9 @@ import com.horqian.basic.common.CommonCode;
 import com.horqian.basic.common.CommonPageParam;
 import com.horqian.basic.common.CommonResponse;
 import com.horqian.basic.common.CommonResult;
+import com.horqian.basic.entity.SysRolePermissionTbl;
 import com.horqian.basic.entity.SysRoleTbl;
+import com.horqian.basic.service.SysRolePermissionTblService;
 import com.horqian.basic.service.SysRoleTblService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +34,8 @@ public class SysRoleTblController {
 
     @Autowired
     private SysRoleTblService sysRoleTblService;
+    @Autowired
+    private SysRolePermissionTblService sysRolePermissionTblService;
 
     @ApiOperation("角色下拉列表")
     @GetMapping("/selectList")
@@ -43,7 +47,7 @@ public class SysRoleTblController {
     }
 
     @ApiOperation("查询角色")
-    @GetMapping("/select")
+    @PostMapping("/select")
     public CommonResult select(@RequestBody CommonPageParam<SysRoleTbl> commonPageParam) {
         QueryWrapper<SysRoleTbl> queryWrapper = new QueryWrapper<>(commonPageParam.getData());
         IPage<SysRoleTbl> page = sysRoleTblService.page(commonPageParam.getPage(), queryWrapper);
@@ -72,8 +76,12 @@ public class SysRoleTblController {
 
     @ApiOperation("删除角色")
     @DeleteMapping("/delete")
-    public CommonResult delete(Long id) {
+    public CommonResult delete(@RequestParam Long id) {
         boolean delete = sysRoleTblService.removeById(id);
+        //删除角色的权限
+        QueryWrapper<SysRolePermissionTbl> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("role_id",id);
+        sysRolePermissionTblService.remove(queryWrapper);
         if (delete) {
             return CommonResponse.makeRsp(CommonCode.SUCCESS);
         }
