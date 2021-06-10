@@ -8,12 +8,14 @@ import com.horqian.basic.entity.SysUserRoleTbl;
 import com.horqian.basic.entity.SysUserTbl;
 import com.horqian.basic.service.SysUserRoleTblService;
 import com.horqian.basic.service.SysUserRoleViewService;
+import com.horqian.basic.vo.SysUserRoleReq;
 import com.horqian.basic.vo.SysUserRoleView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Api(tags = "用户角色管理")
@@ -28,11 +30,21 @@ public class SysUserRoleTblController {
 
     @ApiOperation("用户授予角色")
     @PostMapping("/update")
-    public CommonResult add(@RequestBody List<SysUserRoleTbl> list) {
+    public CommonResult add(@RequestBody SysUserRoleReq req) {
         QueryWrapper<SysUserRoleTbl> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",list.get(0).getRoleId());
+        queryWrapper.eq("user_id",req.getUserId());
         sysUserRoleTblService.remove(queryWrapper);
-        boolean save = sysUserRoleTblService.saveBatch(list);
+        boolean save =true;
+        if(req.getRoleIdList() != null && req.getRoleIdList().length >0){
+            List<SysUserRoleTbl> list = new ArrayList<>();
+            for(Long roleId : req.getRoleIdList()){
+                SysUserRoleTbl tbl = new SysUserRoleTbl();
+                tbl.setUserId(req.getUserId());
+                tbl.setRoleId(roleId);
+                list.add(tbl);
+            }
+            save = sysUserRoleTblService.saveBatch(list);
+        }
         if (save) {
             return CommonResponse.makeRsp(CommonCode.SUCCESS);
         }
@@ -56,9 +68,6 @@ public class SysUserRoleTblController {
         QueryWrapper<SysUserRoleView> roleWrapper = new QueryWrapper<>();
         roleWrapper.eq("user_id",userId);
         List<SysUserRoleView> list=sysUserRoleViewService.list(roleWrapper);
-        if (list != null && list.size() >0) {
-            return CommonResponse.makeRsp(CommonCode.SUCCESS,list);
-        }
-        return CommonResponse.makeRsp(CommonCode.FAIL);
+        return CommonResponse.makeRsp(CommonCode.SUCCESS,list);
     }
 }
