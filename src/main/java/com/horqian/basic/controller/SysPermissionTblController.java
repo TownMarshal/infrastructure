@@ -10,11 +10,17 @@ import com.horqian.basic.entity.SysPermissionTbl;
 import com.horqian.basic.entity.SysRolePermissionTbl;
 import com.horqian.basic.service.SysPermissionTblService;
 import com.horqian.basic.service.SysRolePermissionTblService;
+import com.horqian.basic.service.SysRolePermissionViewService;
+import com.horqian.basic.service.SysUserRoleViewService;
+import com.horqian.basic.utils.JwtUtils;
+import com.horqian.basic.vo.SysRolePermissionView;
+import com.horqian.basic.vo.SysUserRoleView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +41,10 @@ public class SysPermissionTblController {
     private SysPermissionTblService sysPermissionTblService;
     @Autowired
     private SysRolePermissionTblService sysRolePermissionTblService;
+    @Autowired
+    private SysUserRoleViewService sysUserRoleViewService;
+    @Autowired
+    private SysRolePermissionViewService sysRolePermissionViewService;
 
     @ApiOperation("查询权限树")
     @GetMapping("/selectTree")
@@ -45,7 +55,7 @@ public class SysPermissionTblController {
             tbl.setChildrenList(new ArrayList<>());
             sonList.addAll(sysPermissionTblService.selectByParentId(tbl.getId()));
         }
-        if(sonList != null && sonList.size() > 0){
+        if( sonList.size() > 0){
             for(SysPermissionTbl tbl : sonList){
                 tbl.setChildrenList(sysPermissionTblService.selectByParentId(tbl.getId()));
                 for(SysPermissionTbl parentTbl : list){
@@ -57,6 +67,60 @@ public class SysPermissionTblController {
             }
         }
         return CommonResponse.makeRsp(CommonCode.SUCCESS,list);
+    }
+
+    @ApiOperation("根据用户查询权限树")
+    @GetMapping("/selectTreeByUserId")
+    public CommonResult selectTreeByUserId(HttpServletRequest httpServletRequest){
+        String token = httpServletRequest.getHeader("Access-Token");
+        List<SysRolePermissionView> list = new ArrayList<>();
+        List<SysRolePermissionView> returnList = new ArrayList<>();
+        if(token != null){
+            String userId = JwtUtils.getAudience(token);
+            //查询出来该用户的角色列表
+            QueryWrapper<SysUserRoleView> roleWrapper = new QueryWrapper<>();
+            roleWrapper.eq("user_id",userId);
+            List<SysUserRoleView> roleList=sysUserRoleViewService.list(roleWrapper);
+            if(roleList != null && roleList.size() > 0){
+                List<Long> roleIdList = new ArrayList<>();
+                for(SysUserRoleView role : roleList){
+                    roleIdList.add(role.getId());
+                }
+                QueryWrapper<SysRolePermissionView> permissionWrapper = new QueryWrapper<>();
+                permissionWrapper.in("role_id",roleIdList);
+                permissionWrapper.groupBy("id");
+                list.addAll(sysRolePermissionViewService.list(permissionWrapper));
+            }
+            if(list.size() > 0){
+                List<SysRolePermissionView> sonList = new ArrayList<>();
+                //根权限
+                for(SysRolePermissionView view : list){
+                    if(view.getParentId().equals(1L)){
+                        view.setChildrenList(new ArrayList<>());
+                        returnList.add(view);
+                    }
+                }
+                //子权限
+                for(SysRolePermissionView view : list){
+                    for(SysRolePermissionView parent : returnList){
+                        if(parent.getId().equals(view.getParentId())){
+                            view.setChildrenList(new ArrayList<>());
+                            parent.getChildrenList().add(view);
+                            sonList.add(view);
+                        }
+                    }
+                }
+                //孙权限
+                for(SysRolePermissionView view : list){
+                    for(SysRolePermissionView parent : sonList){
+                        if(parent.getId().equals(view.getParentId())){
+                            parent.getChildrenList().add(view);
+                        }
+                    }
+                }
+            }
+        }
+        return CommonResponse.makeRsp(CommonCode.SUCCESS,returnList);
     }
 
     @ApiOperation("新建权限")

@@ -41,7 +41,7 @@ public class SysUserTbl implements Serializable {
 
     @JsonSerialize(using = ToStringSerializer.class)
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Long id;
+    private String id;
 
     @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "单位id")

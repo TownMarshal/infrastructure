@@ -51,7 +51,8 @@ public class AttachmentTblController {
             attachmentTbl.setAttachmentPath(upload);
             boolean save = attachmentTblService.save(attachmentTbl);
             if (save) {
-                return CommonResponse.makeRsp(CommonCode.SUCCESS, attachmentTbl.getId().toString());
+//                return CommonResponse.makeRsp(CommonCode.SUCCESS, attachmentTbl.getId().toString());
+                return CommonResponse.makeRsp(CommonCode.SUCCESS, attachmentTbl.getAttachmentPath().toString());
             }
         }
         return CommonResponse.makeRsp(CommonCode.FAIL);

@@ -30,7 +30,7 @@ public class SysRoleTbl implements Serializable {
 
     @JsonSerialize(using = ToStringSerializer.class)
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private String id;
+    private Long id;
 
     @ApiModelProperty(value = "角色名称")
     private String roleName;

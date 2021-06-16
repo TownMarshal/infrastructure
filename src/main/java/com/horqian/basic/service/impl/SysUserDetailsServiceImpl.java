@@ -43,9 +43,10 @@ public class SysUserDetailsServiceImpl implements UserDetailsService {
             for(SysUserRoleView role : roleList) {
                 QueryWrapper<SysRolePermissionView> permissionWrapper = new QueryWrapper<>();
                 permissionWrapper.eq("role_id",role.getId());
+                permissionWrapper.groupBy("id");
                 permissionList.addAll(sysRolePermissionViewService.list(permissionWrapper));
             }
-            String token = JwtUtils.createToken(sysUserTbl.getId().toString(), sysUserTbl.getLoginName(),sysUserTbl.getUserName());
+            String token = JwtUtils.createToken(sysUserTbl.getId(), sysUserTbl.getLoginName(),sysUserTbl.getUserName());
             SysUserDetails user = new SysUserDetails();
             user.setToken(token);
             user.setRoleList(roleList);
