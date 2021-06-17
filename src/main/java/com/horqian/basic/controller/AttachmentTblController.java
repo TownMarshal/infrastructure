@@ -8,6 +8,10 @@ import com.horqian.basic.common.CommonResult;
 import com.horqian.basic.entity.AttachmentTbl;
 import com.horqian.basic.service.AttachmentTblService;
 import com.horqian.basic.utils.ObsUtil;
+import com.obs.services.ObsClient;
+import com.obs.services.model.HttpMethodEnum;
+import com.obs.services.model.TemporarySignatureRequest;
+import com.obs.services.model.TemporarySignatureResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +26,7 @@ import java.io.IOException;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author macro
@@ -44,19 +48,20 @@ public class AttachmentTblController {
     public CommonResult add(MultipartFile file, AttachmentTbl attachmentTbl) throws IOException {
         String upload = obsUtil.upload(file);
         if (!"".equals(upload)) {
-            if(attachmentTbl.getAttachmentName() != null && !attachmentTbl.getAttachmentName().equals("")){
-            }else {
+            if (attachmentTbl.getAttachmentName() != null && !attachmentTbl.getAttachmentName().equals("")) {
+            } else {
                 attachmentTbl.setAttachmentName(file.getOriginalFilename());
             }
             attachmentTbl.setAttachmentPath(upload);
             boolean save = attachmentTblService.save(attachmentTbl);
             if (save) {
-//                return CommonResponse.makeRsp(CommonCode.SUCCESS, attachmentTbl.getId().toString());
-                return CommonResponse.makeRsp(CommonCode.SUCCESS, attachmentTbl.getAttachmentPath().toString());
+                String temporaryUrl = obsUtil.getTemporaryUrl(upload);
+                return CommonResponse.makeRsp(CommonCode.SUCCESS, temporaryUrl);
             }
         }
         return CommonResponse.makeRsp(CommonCode.FAIL);
     }
+
 
 }
 
