@@ -1,8 +1,7 @@
 package com.horqian.basic.controller;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
 import com.google.api.client.util.IOUtils;
 import com.horqian.basic.annotation.PassToken;
 import com.horqian.basic.common.CommonCode;
@@ -11,23 +10,13 @@ import com.horqian.basic.common.CommonResult;
 import com.horqian.basic.entity.AttachmentTbl;
 import com.horqian.basic.service.AttachmentTblService;
 import com.horqian.basic.utils.ObsUtil;
-import com.obs.services.ObsClient;
 import com.obs.services.exception.ObsException;
-import com.obs.services.model.HttpMethodEnum;
 import com.obs.services.model.ObsObject;
-import com.obs.services.model.TemporarySignatureRequest;
-import com.obs.services.model.TemporarySignatureResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
