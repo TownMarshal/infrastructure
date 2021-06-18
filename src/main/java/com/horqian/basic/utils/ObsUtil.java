@@ -87,44 +87,9 @@ public class ObsUtil {
         }
     }
 
-//    public  void download(String objectName){
-//         try {
-//            // 创建ObsClient实例
-//            String endPoint = "https://obs.cn-north-4.myhuaweicloud.com";
-//            String ak = "E36RAKKAVTC1BSDOM3RQ";
-//            String sk = "eKMChmxZwyRVZm1h2dNgA9AxttLLGCAOvGZgqP3m";
-//            String bucketname = "horqianbasic";
-//
-//            ObsClient obsClient = new ObsClient(ak, sk, endPoint);
-//            ObsObject obsObject = obsClient.getObject(bucketname, objectName);
-//            InputStream inputStream = obsObject.getObjectContent();
-//            // 缓冲文件输出流
-//            BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
-////            // 为防止 文件名出现乱码
-////            final String userAgent = request.getHeader("USER-AGENT");
-////            // IE浏览器
-////            if (StringUtils.contains(userAgent, "MSIE")) {
-////                objectName = URLEncoder.encode(objectName, "UTF-8");
-////            } else {
-////                // google,火狐浏览器
-////                if (StringUtils.contains(userAgent, "Mozilla")) {
-////                    objectName = new String(objectName.getBytes(), "ISO8859-1");
-////                } else {
-////                    // 其他浏览器
-////                    objectName = URLEncoder.encode(objectName, "UTF-8");
-////                }
-////            }
-//            response.reset();
-//            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(attachmentName, "UTF-8"));
-//            response.setContentType("application/octet-stream");
-//            response.setCharacterEncoding("UTF-8");
-//            IOUtils.copy(inputStream, outputStream);
-//            outputStream.flush();
-//            outputStream.close();
-//            inputStream.close();
-//            return null;
-//        } catch (IOException | ObsException e) {
-//            return CommonResponse.makeRsp(CommonCode.FAIL, "文件下载失败！");
-//        }
-//    }
+    public ObsObject getObsObject(String objectName){
+        ObsClient obsClient = new ObsClient(ak, sk, endPoint);
+        ObsObject object = obsClient.getObject(bucketname, objectName);
+        return object;
+    }
 }
