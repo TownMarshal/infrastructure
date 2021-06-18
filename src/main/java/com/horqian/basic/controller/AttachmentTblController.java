@@ -83,7 +83,6 @@ public class AttachmentTblController {
         String objectName = attachmentTbl.getAttachmentPath();
         String attachmentName = attachmentTbl.getAttachmentName();
         try {
-            // 创建ObsClient实例
             ObsObject obsObject = obsUtil.getObsObject(objectName);
             InputStream inputStream = obsObject.getObjectContent();
             // 缓冲文件输出流
