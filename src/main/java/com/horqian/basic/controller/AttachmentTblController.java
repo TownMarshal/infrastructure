@@ -1,6 +1,9 @@
 package com.horqian.basic.controller;
 
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.google.api.client.util.IOUtils;
 import com.horqian.basic.annotation.PassToken;
 import com.horqian.basic.common.CommonCode;
 import com.horqian.basic.common.CommonResponse;
@@ -9,20 +12,27 @@ import com.horqian.basic.entity.AttachmentTbl;
 import com.horqian.basic.service.AttachmentTblService;
 import com.horqian.basic.utils.ObsUtil;
 import com.obs.services.ObsClient;
+import com.obs.services.exception.ObsException;
 import com.obs.services.model.HttpMethodEnum;
+import com.obs.services.model.ObsObject;
 import com.obs.services.model.TemporarySignatureRequest;
 import com.obs.services.model.TemporarySignatureResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLEncoder;
 
 /**
  * <p>
@@ -47,6 +57,7 @@ public class AttachmentTblController {
     @PostMapping(value = "add")
     public CommonResult add(MultipartFile file, AttachmentTbl attachmentTbl) throws IOException {
         String upload = obsUtil.upload(file);
+        System.out.println(upload);
         if (!"".equals(upload)) {
             if (attachmentTbl.getAttachmentName() != null && !attachmentTbl.getAttachmentName().equals("")) {
             } else {
@@ -60,6 +71,104 @@ public class AttachmentTblController {
             }
         }
         return CommonResponse.makeRsp(CommonCode.FAIL);
+    }
+
+
+//    @PassToken
+//    @ApiOperation("下载附件")
+//    @GetMapping(value = "download")
+//
+//    public CommonResult fileDownload(HttpServletRequest request, HttpServletResponse response, String objectName/*@RequestBody String jsonString*/) {
+////        JSONObject jsonObject = JSON.parseObject(jsonString);
+////        String fileName = JSON.parseObject((String) jsonObject.get("fileName"), String.class);
+//
+//        try {
+//            // 创建ObsClient实例
+//            String endPoint = "https://obs.cn-north-4.myhuaweicloud.com";
+//            String ak = "E36RAKKAVTC1BSDOM3RQ";
+//            String sk = "eKMChmxZwyRVZm1h2dNgA9AxttLLGCAOvGZgqP3m";
+//            String bucketname = "horqianbasic";
+////            ObsClient obsClient = new ObsClient(FileConstant.AK, FileConstant.SK, FileConstant.END_POINT);
+//            ObsClient obsClient = new ObsClient(ak, sk, endPoint);
+//            ObsObject obsObject = obsClient.getObject(bucketname, objectName);
+//            InputStream inputStream = obsObject.getObjectContent();
+//            // 缓冲文件输出流
+//            BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+//            // 为防止 文件名出现乱码
+//            final String userAgent = request.getHeader("USER-AGENT");
+//            // IE浏览器
+//            if (StringUtils.contains(userAgent, "MSIE")) {
+//                objectName = URLEncoder.encode(objectName, "UTF-8");
+//            } else {
+//                // google,火狐浏览器
+//                if (StringUtils.contains(userAgent, "Mozilla")) {
+//                    objectName = new String(objectName.getBytes(), "ISO8859-1");
+//                } else {
+//                    // 其他浏览器
+//                    objectName = URLEncoder.encode(objectName, "UTF-8");
+//                }
+//            }
+//            response.reset();
+//            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(objectName, "UTF-8"));
+//            response.setContentType("application/octet-stream");
+//            response.setCharacterEncoding("UTF-8");
+//            IOUtils.copy(inputStream, outputStream);
+//            outputStream.flush();
+//            outputStream.close();
+//            inputStream.close();
+//            return null;
+//        } catch (IOException | ObsException e) {
+//            return CommonResponse.makeRsp(CommonCode.FAIL, "文件下载失败！");
+//        }
+//    }
+
+
+    @PassToken
+    @ApiOperation("下载附件")
+    @GetMapping(value = "download")
+
+    public CommonResult fileDownload(HttpServletRequest request, HttpServletResponse response, Long id) {
+        AttachmentTbl attachmentTbl = attachmentTblService.getById(id);
+        String objectName = attachmentTbl.getAttachmentPath();
+        String attachmentName = attachmentTbl.getAttachmentName();
+        try {
+            // 创建ObsClient实例
+            String endPoint = "https://obs.cn-north-4.myhuaweicloud.com";
+            String ak = "E36RAKKAVTC1BSDOM3RQ";
+            String sk = "eKMChmxZwyRVZm1h2dNgA9AxttLLGCAOvGZgqP3m";
+            String bucketname = "horqianbasic";
+
+            ObsClient obsClient = new ObsClient(ak, sk, endPoint);
+            ObsObject obsObject = obsClient.getObject(bucketname, objectName);
+            InputStream inputStream = obsObject.getObjectContent();
+            // 缓冲文件输出流
+            BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+//            // 为防止 文件名出现乱码
+//            final String userAgent = request.getHeader("USER-AGENT");
+//            // IE浏览器
+//            if (StringUtils.contains(userAgent, "MSIE")) {
+//                objectName = URLEncoder.encode(objectName, "UTF-8");
+//            } else {
+//                // google,火狐浏览器
+//                if (StringUtils.contains(userAgent, "Mozilla")) {
+//                    objectName = new String(objectName.getBytes(), "ISO8859-1");
+//                } else {
+//                    // 其他浏览器
+//                    objectName = URLEncoder.encode(objectName, "UTF-8");
+//                }
+//            }
+            response.reset();
+            response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(attachmentName, "UTF-8"));
+            response.setContentType("application/octet-stream");
+            response.setCharacterEncoding("UTF-8");
+            IOUtils.copy(inputStream, outputStream);
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+            return null;
+        } catch (IOException | ObsException e) {
+            return CommonResponse.makeRsp(CommonCode.FAIL, "文件下载失败！");
+        }
     }
 
 
