@@ -22,8 +22,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
-        /*String token = request.getHeader("Access-Token");
+//
+/*
+        String token = request.getHeader("Access-Token");
         // 如果不是映射到方法直接通过
         if (!(handler instanceof HandlerMethod)) {
             return true;
@@ -59,7 +60,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             throw new SignatureException("登录超时，请重新登录");
             //response.sendError(401, "登录超时，请重新登录");
             //return false;
-        }*/
+        }
+*/
+
+//
         return true;
     }
 

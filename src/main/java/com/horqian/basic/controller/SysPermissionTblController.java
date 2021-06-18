@@ -26,7 +26,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author macro
@@ -48,62 +48,62 @@ public class SysPermissionTblController {
 
     @ApiOperation("查询权限树")
     @GetMapping("/selectTree")
-    public CommonResult selectTree(){
+    public CommonResult selectTree() {
         List<SysPermissionTbl> list = sysPermissionTblService.selectByParentId(1L);
         List<SysPermissionTbl> sonList = new ArrayList<>();
-        for(SysPermissionTbl tbl: list){
+        for (SysPermissionTbl tbl : list) {
             tbl.setChildrenList(new ArrayList<>());
             sonList.addAll(sysPermissionTblService.selectByParentId(tbl.getId()));
         }
-        if( sonList.size() > 0){
-            for(SysPermissionTbl tbl : sonList){
+        if (sonList.size() > 0) {
+            for (SysPermissionTbl tbl : sonList) {
                 tbl.setChildrenList(sysPermissionTblService.selectByParentId(tbl.getId()));
-                for(SysPermissionTbl parentTbl : list){
-                    if(parentTbl.getId().equals(tbl.getParentId())){
+                for (SysPermissionTbl parentTbl : list) {
+                    if (parentTbl.getId().equals(tbl.getParentId())) {
                         parentTbl.getChildrenList().add(tbl);
                         break;
                     }
                 }
             }
         }
-        return CommonResponse.makeRsp(CommonCode.SUCCESS,list);
+        return CommonResponse.makeRsp(CommonCode.SUCCESS, list);
     }
 
     @ApiOperation("根据用户查询权限树")
     @GetMapping("/selectTreeByUserId")
-    public CommonResult selectTreeByUserId(HttpServletRequest httpServletRequest){
+    public CommonResult selectTreeByUserId(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader("Access-Token");
         List<SysRolePermissionView> list = new ArrayList<>();
         List<SysRolePermissionView> returnList = new ArrayList<>();
-        if(token != null){
+        if (token != null) {
             String userId = JwtUtils.getAudience(token);
             //查询出来该用户的角色列表
             QueryWrapper<SysUserRoleView> roleWrapper = new QueryWrapper<>();
-            roleWrapper.eq("user_id",userId);
-            List<SysUserRoleView> roleList=sysUserRoleViewService.list(roleWrapper);
-            if(roleList != null && roleList.size() > 0){
+            roleWrapper.eq("user_id", userId);
+            List<SysUserRoleView> roleList = sysUserRoleViewService.list(roleWrapper);
+            if (roleList != null && roleList.size() > 0) {
                 List<Long> roleIdList = new ArrayList<>();
-                for(SysUserRoleView role : roleList){
+                for (SysUserRoleView role : roleList) {
                     roleIdList.add(role.getId());
                 }
                 QueryWrapper<SysRolePermissionView> permissionWrapper = new QueryWrapper<>();
-                permissionWrapper.in("role_id",roleIdList);
+                permissionWrapper.in("role_id", roleIdList);
                 permissionWrapper.groupBy("id");
                 list.addAll(sysRolePermissionViewService.list(permissionWrapper));
             }
-            if(list.size() > 0){
+            if (list.size() > 0) {
                 List<SysRolePermissionView> sonList = new ArrayList<>();
                 //根权限
-                for(SysRolePermissionView view : list){
-                    if(view.getParentId().equals(1L)){
+                for (SysRolePermissionView view : list) {
+                    if (view.getParentId().equals(1L)) {
                         view.setChildrenList(new ArrayList<>());
                         returnList.add(view);
                     }
                 }
                 //子权限
-                for(SysRolePermissionView view : list){
-                    for(SysRolePermissionView parent : returnList){
-                        if(parent.getId().equals(view.getParentId())){
+                for (SysRolePermissionView view : list) {
+                    for (SysRolePermissionView parent : returnList) {
+                        if (parent.getId().equals(view.getParentId())) {
                             view.setChildrenList(new ArrayList<>());
                             parent.getChildrenList().add(view);
                             sonList.add(view);
@@ -111,16 +111,16 @@ public class SysPermissionTblController {
                     }
                 }
                 //孙权限
-                for(SysRolePermissionView view : list){
-                    for(SysRolePermissionView parent : sonList){
-                        if(parent.getId().equals(view.getParentId())){
+                for (SysRolePermissionView view : list) {
+                    for (SysRolePermissionView parent : sonList) {
+                        if (parent.getId().equals(view.getParentId())) {
                             parent.getChildrenList().add(view);
                         }
                     }
                 }
             }
         }
-        return CommonResponse.makeRsp(CommonCode.SUCCESS,returnList);
+        return CommonResponse.makeRsp(CommonCode.SUCCESS, returnList);
     }
 
     @ApiOperation("新建权限")
@@ -150,14 +150,14 @@ public class SysPermissionTblController {
         List<SysPermissionTbl> list = sysPermissionTblService.selectByParentId(id);
         List<Long> idList = new ArrayList<>();
         List<SysPermissionTbl> childrenList = new ArrayList<>();
-        if(list != null && list.size() >0){
-            for(SysPermissionTbl tbl : list){
+        if (list != null && list.size() > 0) {
+            for (SysPermissionTbl tbl : list) {
                 idList.add(tbl.getId());
                 childrenList.addAll(sysPermissionTblService.selectByParentId(tbl.getId()));
             }
         }
-        if(childrenList != null && childrenList.size() > 0){
-            for(SysPermissionTbl tbl : childrenList){
+        if (childrenList != null && childrenList.size() > 0) {
+            for (SysPermissionTbl tbl : childrenList) {
                 idList.add(tbl.getId());
             }
         }
@@ -166,7 +166,7 @@ public class SysPermissionTblController {
         sysPermissionTblService.removeByIds(idList);
         //删除角色拥有的权限
         QueryWrapper<SysRolePermissionTbl> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("permission_id",idList);
+        queryWrapper.in("permission_id", idList);
         boolean delete = sysRolePermissionTblService.remove(queryWrapper);
         if (delete) {
             return CommonResponse.makeRsp(CommonCode.SUCCESS);

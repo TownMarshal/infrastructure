@@ -1,16 +1,21 @@
 package com.horqian.basic.utils;
 
+import com.google.api.client.util.IOUtils;
+import com.horqian.basic.common.CommonCode;
+import com.horqian.basic.common.CommonResponse;
 import com.obs.services.ObsClient;
+import com.obs.services.exception.ObsException;
 import com.obs.services.model.HttpMethodEnum;
 import com.obs.services.model.ObsObject;
 import com.obs.services.model.TemporarySignatureRequest;
 import com.obs.services.model.TemporarySignatureResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.javassist.bytecode.ByteArray;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -82,5 +87,9 @@ public class ObsUtil {
         }
     }
 
-
+    public ObsObject getObsObject(String objectName){
+        ObsClient obsClient = new ObsClient(ak, sk, endPoint);
+        ObsObject object = obsClient.getObject(bucketname, objectName);
+        return object;
+    }
 }
