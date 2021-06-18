@@ -1,10 +1,14 @@
 package com.horqian.basic.utils;
 
 import com.obs.services.ObsClient;
+import com.obs.services.model.HttpMethodEnum;
 import com.obs.services.model.ObsObject;
+import com.obs.services.model.TemporarySignatureRequest;
+import com.obs.services.model.TemporarySignatureResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -13,7 +17,7 @@ import java.util.UUID;
 
 @Component
 public class ObsUtil {
-    private static final String endPoint  = "https://obs.cn-north-4.myhuaweicloud.com";
+    private static final String endPoint = "https://obs.cn-north-4.myhuaweicloud.com";
     private static final String ak = "E36RAKKAVTC1BSDOM3RQ";
     private static final String sk = "eKMChmxZwyRVZm1h2dNgA9AxttLLGCAOvGZgqP3m";
     private static final String bucketname = "horqianbasic";
@@ -39,8 +43,23 @@ public class ObsUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return myhuaweicloud+objectName;
+        return objectName;
     }
+
+
+    //    获取临时访问路径
+    public String getTemporaryUrl(String objectName) {
+        // 创建ObsClient实例
+        ObsClient obsClient = new ObsClient(ak, sk, endPoint);
+        // URL有效期，3600秒
+        long expireSeconds = 3600L;
+        TemporarySignatureRequest request = new TemporarySignatureRequest(HttpMethodEnum.GET, expireSeconds);
+        request.setBucketName(bucketname);
+        request.setObjectKey(objectName);
+        TemporarySignatureResponse response = obsClient.createTemporarySignature(request);
+        return response.getSignedUrl();
+    }
+
 
     /**
      * @param fileName     minio地址
@@ -49,7 +68,7 @@ public class ObsUtil {
     public void downloadLocation(String fileName, String locationName) {
         ObsClient obsClient = new ObsClient(ak, sk, endPoint);
         try {
-            ObsObject obsObject  = obsClient.getObject(bucketname, "2021/06/10/af65a64140a0427b98a10df7b4441f73.png");
+            ObsObject obsObject = obsClient.getObject(bucketname, "2021/06/10/af65a64140a0427b98a10df7b4441f73.png");
             InputStream input = obsObject.getObjectContent();
             byte buf[] = new byte[1024];
             int length = 0;
@@ -62,4 +81,6 @@ public class ObsUtil {
             e.printStackTrace();
         }
     }
+
+
 }
