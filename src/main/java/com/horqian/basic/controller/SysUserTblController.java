@@ -4,6 +4,7 @@ package com.horqian.basic.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.horqian.basic.annotation.PassToken;
+import com.horqian.basic.annotation.SysLog;
 import com.horqian.basic.common.CommonCode;
 import com.horqian.basic.common.CommonPageParam;
 import com.horqian.basic.common.CommonResponse;
@@ -45,6 +46,7 @@ public class SysUserTblController {
 
     @ApiOperation("新建用户")
     @PostMapping("/add")
+    @SysLog(type="新建",name="系统用户")
     public CommonResult add(@RequestBody SysUserTbl sysUserTbl) {
         QueryWrapper<SysUserTbl> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("user_name",sysUserTbl.getUserName());
