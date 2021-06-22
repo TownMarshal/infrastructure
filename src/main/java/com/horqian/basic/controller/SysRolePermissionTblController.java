@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.horqian.basic.common.CommonCode;
 import com.horqian.basic.common.CommonResponse;
 import com.horqian.basic.common.CommonResult;
-import com.horqian.basic.entity.SysPermissionTbl;
 import com.horqian.basic.entity.SysRolePermissionTbl;
 import com.horqian.basic.service.SysRolePermissionTblService;
 import io.swagger.annotations.Api;

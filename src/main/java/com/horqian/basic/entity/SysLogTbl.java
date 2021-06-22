@@ -2,10 +2,7 @@ package com.horqian.basic.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
-
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -21,12 +18,12 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author macro
- * @since 2021-06-09
+ * @since 2021-06-22
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="AttachmentTbl对象", description="")
-public class AttachmentTbl implements Serializable {
+@ApiModel(value="SysLogTbl对象", description="")
+public class SysLogTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -34,31 +31,29 @@ public class AttachmentTbl implements Serializable {
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Long id;
 
-    @ApiModelProperty(value = "附件名称")
-    private String attachmentName;
-
-    @ApiModelProperty(value = "附件说明")
-    private String comments;
-
     @JsonSerialize(using = ToStringSerializer.class)
-    @ApiModelProperty(value = "用户id")
     private Long userId;
 
-    @ApiModelProperty(value = "附件分类")
-    private Integer attachmentType;
+    @JsonSerialize(using = ToStringSerializer.class)
+    @ApiModelProperty(value = "执行时间")
+    private Long executeTime;
 
-    @ApiModelProperty(value = "附件地址")
-    private String attachmentPath;
+    @ApiModelProperty(value = "操作类型")
+    private String operationType;
 
-    @TableField(select = false)
+    @ApiModelProperty(value = "操作对象")
+    private String operationObject;
+
+    @ApiModelProperty(value = "类名")
+    private String className;
+
+    @ApiModelProperty(value = "方法名")
+    private String methodName;
+
+    @ApiModelProperty(value = "参数")
+    private String params;
+
     private Date createTime;
-
-    @TableField(select = false)
-    private Date updateTime;
-
-    @TableLogic
-    @TableField(select = false)
-    private Integer deleteFlag;
 
 
 }
