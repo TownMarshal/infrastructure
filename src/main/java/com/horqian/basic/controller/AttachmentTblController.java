@@ -1,7 +1,6 @@
 package com.horqian.basic.controller;
 
 
-
 import com.google.api.client.util.IOUtils;
 import com.horqian.basic.annotation.PassToken;
 import com.horqian.basic.common.CommonCode;
@@ -17,11 +16,14 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -55,8 +57,11 @@ public class AttachmentTblController {
             attachmentTbl.setAttachmentPath(upload);
             boolean save = attachmentTblService.save(attachmentTbl);
             if (save) {
+                Map<String, String> map = new HashMap<>();
                 String temporaryUrl = obsUtil.getTemporaryUrl(upload);
-                return CommonResponse.makeRsp(CommonCode.SUCCESS, temporaryUrl);
+                map.put("id", attachmentTbl.getId().toString());
+                map.put("temporaryUrl", temporaryUrl);
+                return CommonResponse.makeRsp(CommonCode.SUCCESS, map);
             }
         }
         return CommonResponse.makeRsp(CommonCode.FAIL);
@@ -67,7 +72,7 @@ public class AttachmentTblController {
     @ApiOperation("下载附件")
     @GetMapping(value = "download")
 
-    public CommonResult fileDownload(HttpServletResponse response, Long id) {
+    public CommonResult fileDownload(HttpServletResponse response, @RequestParam Long id) {
         AttachmentTbl attachmentTbl = attachmentTblService.getById(id);
         String objectName = attachmentTbl.getAttachmentPath();
         String attachmentName = attachmentTbl.getAttachmentName();
