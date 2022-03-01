@@ -1,8 +1,8 @@
 #minio配置
 minio:
-  endpoint: http://192.168.1.112:9001
-  accessKey: horqian
-  secretKey: Horqian123.
+  endpoint: http://127.0.0.1:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
   bucketName:
 
 #swagger
@@ -13,14 +13,14 @@ swagger:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: Horqian123.
-    #password: Horqian123.
+    password: 123456
     username: root
-    url: jdbc:mysql://192.168.1.112:3306/basic?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/basic?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
   servlet:
     multipart:
       max-request-size: 20MB
       max-file-size: 20MB
+
 
 #mybatis-plus
 mybatis-plus:
@@ -38,4 +38,4 @@ mybatis-plus:
       id-type: assign_id
 
 server:
-  port: 8999
+  port: 8888
