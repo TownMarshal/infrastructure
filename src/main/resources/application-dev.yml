@@ -38,4 +38,4 @@ mybatis-plus:
       id-type: assign_id
 
 server:
-  port: 8888
+  port: 8999

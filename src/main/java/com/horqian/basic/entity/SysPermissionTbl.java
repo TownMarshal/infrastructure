@@ -3,9 +3,6 @@ package com.horqian.basic.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
@@ -13,9 +10,12 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author macro
@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="SysPermissionTbl对象", description="")
+@ApiModel(value = "SysPermissionTbl对象", description = "")
 public class SysPermissionTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,8 +38,8 @@ public class SysPermissionTbl implements Serializable {
     @ApiModelProperty(value = "权限名")
     private String name;
 
-//    @ApiModelProperty(value = "排序")
-//    private Integer orderNum;
+    @ApiModelProperty(value = "排序")
+    private Integer orderNum;
 
     @JsonSerialize(using = ToStringSerializer.class)
     @ApiModelProperty(value = "父级id")

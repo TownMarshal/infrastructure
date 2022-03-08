@@ -69,7 +69,11 @@ public class SysPermissionTblController {
         }
         return CommonResponse.makeRsp(CommonCode.SUCCESS, list);
     }
-
+/*
+ select * from sys_permission_tbl
+      where parent_id = #{parentId}
+      order by order_num
+ */
     @ApiOperation("根据用户查询权限树")
     @GetMapping("/selectTreeByUserId")
     public CommonResult selectTreeByUserId(HttpServletRequest httpServletRequest) {
