@@ -14,6 +14,7 @@ import com.horqian.basic.service.SysRoleTblService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -74,6 +75,7 @@ public class SysRoleTblController {
         return CommonResponse.makeRsp(CommonCode.FAIL);
     }
 
+    @Secured("ROLE_admin")
     @ApiOperation("删除角色")
     @DeleteMapping("/delete")
     public CommonResult delete(@RequestParam Long id) {

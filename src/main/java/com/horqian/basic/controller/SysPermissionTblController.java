@@ -19,6 +19,7 @@ import com.horqian.basic.vo.SysUserRoleView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,6 +52,7 @@ public class SysPermissionTblController {
     @GetMapping("/selectTree")
     public CommonResult selectTree() {
         List<SysPermissionTbl> list = sysPermissionTblService.selectByParentId(1L);
+//        List<SysPermissionTbl> list = sysPermissionTblService.selectByParentId(0L);
         List<SysPermissionTbl> sonList = new ArrayList<>();
         for (SysPermissionTbl tbl : list) {
             tbl.setChildrenList(new ArrayList<>());
@@ -101,6 +103,7 @@ public class SysPermissionTblController {
                 //根权限
                 for (SysRolePermissionView view : list) {
                     if (view.getParentId().equals(1L)) {
+//                    if (view.getParentId().equals(0L)) {
                         view.setChildrenList(new ArrayList<>());
                         returnList.add(view);
                     }
@@ -148,6 +151,7 @@ public class SysPermissionTblController {
         return CommonResponse.makeRsp(CommonCode.FAIL);
     }
 
+    @Secured("ROLE_admin")
     @ApiOperation("删除权限")
     @DeleteMapping("/delete")
     public CommonResult delete(@RequestParam Long id) {

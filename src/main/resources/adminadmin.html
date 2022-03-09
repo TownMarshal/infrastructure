@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    示例代码：
+    public static void main(String[] args) {
+    String pass = "admin";
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    final String passHash = encoder.encode(pass);
+    System.out.println(passHash);
+
+    final boolean matches = encoder.matches(pass, passHash);
+    System.out.println(matches);
+    }
+    运行结果：
+    $2a$10$NypDvqQZTbSfrim2llbhLus.tdLYHRs/4CPZRupupQtXT.MX.r4fW
+    true
+
+    每次生成的hash值都不一样，但是最终的matches都是true
+
+    <title>Title</title>
+
+
+
+    {
+    "msg": "登录成功!",
+    "result": {
+    "accountNonExpired": true,
+    "accountNonLocked": true,
+    "authorities": [
+    {
+    "authority": "ROLE_admin"
+    }
+    ],
+    "credentialsNonExpired": true,
+    "enabled": true,
+    "permissionList": [
+    {
+    "id": 1391228098789207554,
+    "name": "系统用户列表",
+    "orderNum": 0,
+    "parentId": 0,
+    "roleId": 1391228090011207554,
+    "url": "/sysUser/list"
+    }
+    ],
+    "roleList": [
+    {
+    "id": 1391228090011207554,
+    "roleDesc": "管理员",
+    "roleName": "ROLE_admin",
+    "status": 1,
+    "userId": 1391228068781207554
+    }
+    ],
+    "sysUserTbl": {
+    "createTime": 1623137255000,
+    "deleteFlag": 1,
+    "id": "1391228068781207554",
+    "loginName": "admin",
+    "password": "$2a$10$xPBThs3dLzCvM.oDXD1h4OXArBhHvfyuBd/VtQBTHLLET/goawv8u",
+    "phone": "16619702102",
+    "updateTime": 1623137255000,
+    "userName": "admin"
+    },
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMzkxMjI4MDY4NzgxMjA3NTU0IiwibG9naW5OYW1lIjoiYWRtaW4iLCJleHAiOjE2NDY4MDA0MDYsInVzZXJOYW1lIjoiYWRtaW4iLCJpYXQiOjE2NDY3OTMyMDZ9.CGjZEfge8B7RW1CJwpnveeJeB6npeP8Xm1LLNTYHwpk",
+    "username": "admin"
+    },
+    "status": 200
+    }
+</head>
+<body>
+
+</body>
+</html>
