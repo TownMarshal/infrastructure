@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 //@EnableGlobalMethodSecurity(prePostEnabled=true)
 @MapperScan("com.horqian.basic.mapper")
 public class BasicApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(BasicApplication.class, args);
     }

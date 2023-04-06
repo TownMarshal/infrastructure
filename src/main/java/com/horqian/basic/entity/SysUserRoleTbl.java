@@ -2,6 +2,7 @@ package com.horqian.basic.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,7 +14,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author macro
@@ -21,7 +22,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="SysUserRoleTbl对象", description="")
+@ApiModel(value = "SysUserRoleTbl对象", description = "")
 public class SysUserRoleTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;

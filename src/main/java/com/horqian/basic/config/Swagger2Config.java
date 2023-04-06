@@ -31,7 +31,7 @@ public class Swagger2Config {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 // 页面标题
-                .title("青岛浩谦信息科技有限公司")
+                .title("青岛XX信息科技有限公司")
                 // 创建人信息
                 .contact(new Contact("", "", ""))
                 // 版本号

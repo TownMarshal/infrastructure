@@ -32,12 +32,12 @@ public class SysUserRoleTblController {
     @PostMapping("/update")
     public CommonResult add(@RequestBody SysUserRoleReq req) {
         QueryWrapper<SysUserRoleTbl> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("user_id",req.getUserId());
+        queryWrapper.eq("user_id", req.getUserId());
         sysUserRoleTblService.remove(queryWrapper);
-        boolean save =true;
-        if(req.getRoleIdList() != null && req.getRoleIdList().length >0){
+        boolean save = true;
+        if (req.getRoleIdList() != null && req.getRoleIdList().length > 0) {
             List<SysUserRoleTbl> list = new ArrayList<>();
-            for(Long roleId : req.getRoleIdList()){
+            for (Long roleId : req.getRoleIdList()) {
                 SysUserRoleTbl tbl = new SysUserRoleTbl();
                 tbl.setUserId(req.getUserId());
                 tbl.setRoleId(roleId);
@@ -53,21 +53,21 @@ public class SysUserRoleTblController {
 
     @ApiOperation("根据角色查询用户")
     @GetMapping("/selectUserByRoleId")
-    public CommonResult selectUserByRoleId(@RequestParam Long roleId ) {
+    public CommonResult selectUserByRoleId(@RequestParam Long roleId) {
         List<SysUserTbl> list = sysUserRoleTblService.selectUserByRoleId(roleId);
-        if (list != null && list.size() >0) {
-            return CommonResponse.makeRsp(CommonCode.SUCCESS,list);
+        if (list != null && list.size() > 0) {
+            return CommonResponse.makeRsp(CommonCode.SUCCESS, list);
         }
         return CommonResponse.makeRsp(CommonCode.FAIL);
     }
 
     @ApiOperation("查询用户角色")
     @GetMapping("/selectRoleByUserId")
-    public CommonResult selectRoleByUserId(@RequestParam Long userId ) {
+    public CommonResult selectRoleByUserId(@RequestParam Long userId) {
         //查询出来该用户的角色列表
         QueryWrapper<SysUserRoleView> roleWrapper = new QueryWrapper<>();
-        roleWrapper.eq("user_id",userId);
-        List<SysUserRoleView> list=sysUserRoleViewService.list(roleWrapper);
-        return CommonResponse.makeRsp(CommonCode.SUCCESS,list);
+        roleWrapper.eq("user_id", userId);
+        List<SysUserRoleView> list = sysUserRoleViewService.list(roleWrapper);
+        return CommonResponse.makeRsp(CommonCode.SUCCESS, list);
     }
 }

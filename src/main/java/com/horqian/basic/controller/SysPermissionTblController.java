@@ -2,8 +2,6 @@ package com.horqian.basic.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.horqian.basic.annotation.PassToken;
-import com.horqian.basic.annotation.SysLog;
 import com.horqian.basic.common.CommonCode;
 import com.horqian.basic.common.CommonResponse;
 import com.horqian.basic.common.CommonResult;
@@ -51,8 +49,8 @@ public class SysPermissionTblController {
     @ApiOperation("查询权限树")
     @GetMapping("/selectTree")
     public CommonResult selectTree() {
-        List<SysPermissionTbl> list = sysPermissionTblService.selectByParentId(1L);
-//        List<SysPermissionTbl> list = sysPermissionTblService.selectByParentId(0L);
+//        List<SysPermissionTbl> list = sysPermissionTblService.selectByParentId(1L);
+        List<SysPermissionTbl> list = sysPermissionTblService.selectByParentId(0L);
         List<SysPermissionTbl> sonList = new ArrayList<>();
         for (SysPermissionTbl tbl : list) {
             tbl.setChildrenList(new ArrayList<>());
@@ -71,11 +69,12 @@ public class SysPermissionTblController {
         }
         return CommonResponse.makeRsp(CommonCode.SUCCESS, list);
     }
-/*
- select * from sys_permission_tbl
-      where parent_id = #{parentId}
-      order by order_num
- */
+
+    /*
+     select * from sys_permission_tbl
+          where parent_id = #{parentId}
+          order by order_num
+     */
     @ApiOperation("根据用户查询权限树")
     @GetMapping("/selectTreeByUserId")
     public CommonResult selectTreeByUserId(HttpServletRequest httpServletRequest) {
@@ -102,8 +101,8 @@ public class SysPermissionTblController {
                 List<SysRolePermissionView> sonList = new ArrayList<>();
                 //根权限
                 for (SysRolePermissionView view : list) {
-                    if (view.getParentId().equals(1L)) {
-//                    if (view.getParentId().equals(0L)) {
+//                    if (view.getParentId().equals(1L)) {
+                    if (view.getParentId().equals(0L)) {
                         view.setChildrenList(new ArrayList<>());
                         returnList.add(view);
                     }

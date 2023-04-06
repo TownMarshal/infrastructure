@@ -4,14 +4,14 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import java.io.Serializable;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="SysRoleTbl对象", description="系统角色表")
+@ApiModel(value = "SysRoleTbl对象", description = "系统角色表")
 public class SysRoleTbl implements Serializable {
 
     private static final long serialVersionUID = 1L;

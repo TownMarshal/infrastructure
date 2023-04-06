@@ -11,10 +11,10 @@ import java.security.SignatureException;
 
 @RestControllerAdvice
 public class PermissionHandler {
-    @ExceptionHandler(value = { SignatureException.class })
+    @ExceptionHandler(value = {SignatureException.class})
     @ResponseBody
-    public CommonResult authorizationException(SignatureException e){
-        return CommonResponse.makeRsp(CommonCode.FAIL,e.getMessage());
+    public CommonResult authorizationException(SignatureException e) {
+        return CommonResponse.makeRsp(CommonCode.FAIL, e.getMessage());
     }
 }
 

@@ -1,18 +1,10 @@
 package com.horqian.basic.interceptor;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.horqian.basic.annotation.PassToken;
-import com.horqian.basic.utils.JwtUtils;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
-import java.security.SignatureException;
 
 /**
  * @author macro
